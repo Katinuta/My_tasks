@@ -15,7 +15,7 @@ public class Task1 {
 		str2=str1.substring(0, part1);//get first half the string
 		System.out.println(str2);//show first half the string
 		str3=str1.substring(part1);//get second half the string
-		System.out.println(str3);//show second half the string
+		System.out.println(str3);// show second half the string
 	}
 	
 }
