@@ -2,7 +2,7 @@ package HomeTask2_2;
 
 import java.util.Scanner;
 
-/** Class compare 2 input user numbers*/
+/** Class compares 2 input user numbers*/
 
 public class Task2 {
 	public static void main(String[] args){
