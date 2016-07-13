@@ -2,7 +2,8 @@ package HomeTask3_2_1;
 
 import java.util.Scanner;
 
-/**Class deletes input user number of letter in all words if length this number */
+/**Class changes input user number of letter on input user symbol
+ * in all words if length this number */
 
 public class ChangeLetter {
 
