@@ -1,0 +1,208 @@
+Влияние на перегрузку и переопределение методов изменения сигнатуры метода, типа возвращаемого значения и модификатора
+доступа
+
+Метод имеет следующие характеристики:
+1.	Модификатор.
+2.	Тип возвращаемого значения.
+3.	Сигнатура метода (имя метода и набор параметров).
+
+Перегрузка методов
+
+Java позволяет создавать несколько методов с одинаковым именем метода, но разными сигнатурами. 
+Создание метода с тем же именем, но другим набором параметров называется перегрузкой. Перегрузка методов происходит
+в рамках одного класса. Какой из перегруженных методов вызовется, определяет Java на основании  фактических передаваемых 
+параметров.
+Пример перегрузки метода.
+Пусть у нас есть класс Addition. В нем мы объявили метод operation(), который складывает, передаваемые ему значения.
+В первом случае, метод принимает на вход 2 параметра типа int. Во втором случае, выполнив перегрузку метода operation(), 
+мы передаем 3 параметра типа double. В третьем случае, метод operation() после перегрузки будет принимать 2 параметра 
+типа String.
+
+public class Addition  {
+	
+	public void operation(int a,int b){
+		System.out.println("Результат сложения: "+(a+b));
+	}
+	public void operation (double a, double b, double c){
+		System.out.println("Результат сложения: "+(a+b+c));
+	} 
+	public void operation(String a,String b){
+		String c=a+b;
+		System.out.println("Результат сложения: " + c);
+	}
+}
+
+	В main методе класса Performance создадим объект типа  Addition и вызовем метод operation(), в который будем 
+передавать разное количество и разные типы параметров.
+
+public class Performance {
+
+	public static void main(String[] args) {
+		Addition add=new Addition();
+		add.operation(1, 3);
+		add.operation(2.5, 3.6, 1.0);
+		add.operation("Hello","World");
+	}
+
+}
+
+Получим результат:
+
+Результат сложения: 4
+Результат сложения: 7.1
+Результат сложения: HelloWorld
+
+Таким образом, как видно определение того, какой метод будет вызван, зависит от передаваемых в метод параметров.
+
+Изменение модификатора доступа
+
+Попробуем изменить только модификатор доступа с public на private при попытке перегрузки метода operation().
+
+public class Addition  {
+	
+public void operation(int a,int b){
+		System.out.println("Результат сложения: "+(a+b));
+	}
+	private void operation(int a,int b){
+		System.out.println("Результат сложения: "+(a+b));
+	}
+}
+
+Компилятор выдает ошибку: “Duplicate method operation (int, int) in type Addition”. Таким образом, перегрузка метода
+невозможна за счет изменения модификатора доступа.
+
+Изменение типа возвращаемого значения
+
+Попробуем изменить тип возвращаемого значения с void на int при попытке перегрузки метода operation().
+
+public class Addition  {
+		public void operation(int a,int b){
+		System.out.println("Результат сложения: "+(a+b));
+	}
+	public int operation(int a,int b){
+		return a+b;
+	}
+}
+
+Компилятор выдает ошибку: “Duplicate method operation (int, int) in type Addition”. Перегрузка метода невозможна за
+счет изменения типа возвращаемого значения.Значит, перегрузка метода возможна только за счет изменения типа и количества 
+параметров.
+	
+Переопределение методов
+
+При переопределении метода его сигнатура и тип возвращаемого значения должны совпадать. Перед переопределяемым методом в 
+дочернем классе ставится аннотация @Override.
+Пример переопределения метода.
+Родительский класс Calculate имеет метод operation().
+
+public class Calculate {
+	
+	public void operation(int a,int b){
+		System.out.println("Первый аргумент:"+a+"\nВторой аргумент:"+ b);
+	}
+	
+} 
+	Наследуем от класса Calculate класс Addition и переопределяем метод operation().
+
+public class Addition extends Calculate {
+	@Override
+	public void operation(int a,int b){
+		System.out.println("Результат сложения: "+(a+b));
+	}
+}
+ 
+В main методе класса Performance создадим объект типа  Addition и вызовем метод operation().
+
+public class Performance {
+
+	public static void main(String[] args) {
+		Addition add=new Addition();
+		add.operation(10,1);
+	}
+}
+	Получим результат:
+
+	Результат сложения: 11
+
+Для доступа к родительскому методу operation() необходимо использовать ключевое слово super.
+
+public class Addition extends Calculate {
+
+	@Override
+	public void operation(int a, int b) {
+		super.operation(a, b);
+	}
+}
+	Получим результат:
+
+	Первый аргумент: 10
+	Второй аргумент: 1
+
+Изменение сигнатуры метода
+
+При переопределении метода operation() изменим тип int на double и количество параметров на 3 и попытаемся вызвать метод 
+operation() родительского класса.
+
+public class Addition extends Calculate {
+
+	@Override
+	public void operation(double a, double b,double c) {
+		super.operation(a, b, с);
+	}
+}
+
+Получим ошибку :”The method operation (int, int) in the type Calculate is not applicable  for the argument (double, double, double)”.  
+Из этого следует , что сигнатуру метода при переопределении менять нельзя. Если в дочернем классе мы изменим тип, порядок  следования
+или количество аргументов, то получим новый метод, а не переопределяющий метод родительского класса.  
+
+Изменение типа возвращаемого значения
+
+При переопределении метода operation() изменим тип возвращаемого значения с void  на int.
+
+public class Addition extends Calculate {
+
+	@Override
+	public int operation(int a, int b) {
+		super.operation(a, b);
+	}
+}
+
+Получим ошибку: “ The return type is not incompatible with Calculate.operation(int, int)” . А это значит то, что переопределение метода
+невозможно за счет изменения типа возвращаемого значения.
+
+Изменение модификатора доступа
+
+При переопределении метода operation() изменим модификатор доступа с public на private.
+
+public class Addition extends Calculate {
+
+	@Override
+	private void operation(int a, int b) {
+		super.operation(a, b);
+	}
+}
+
+Получим ошибку: ” Cannot reduce the visibility of the inherited method from Calculate”. Также ошибка будет, если модификатор будет 
+отсутствовать или будет protected.  Это значит, что при переопределении метода нельзя сузить права доступа к нему.
+Объявим метод  operation() в родительском классе  protected, а в дочернем на public. 
+
+public class Calculate {
+	
+	protected void operation(int a,int b){
+		System.out.println("Первый аргумент: "+a+"\nВторой аргумент:"+ b);
+	}
+	
+}
+public class Addition extends Calculate {
+
+	@Override
+	public void operation(int a, int b) {
+		super.operation(a, b);
+	}
+}
+
+Переопределение метода прошло компиляцию. Это значит то, что открытый метод должен остаться открытым, а защищенный  может стать открытым, 
+но не может стать закрытым.
+Таким образом, переопределение метода возможно только при неизменной сигнатуре метода и расширении права доступа или получении такого же 
+права доступа к нему, как у родительского метода.
+
